@@ -348,7 +348,6 @@ const checkCorrectFields = () => {
                     document.getElementById.remove();
                 } 
             }); 
-            //console.log("button enabled");
             return;
     }
 
@@ -360,10 +359,30 @@ const checkCorrectFields = () => {
 }
 
 const buttonClick = () => {
-    alert("OK");
+    alert("data OK, will try to send to the server");
+
+    postInfo({name: namee.value, phone: phone.value, email: email.value}, "http://localhost:3000/data/", "POST");
 }
 
+const postInfo = async (newItem, url, method) => {
+    newItem.id = newItem.name;
 
+    let responce = await fetch(url, { 
+        method: method,
+        headers: { 'Content-type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(newItem),
+    })
+
+    if(responce.ok){
+        console.log("task done");
+    }
+
+    else{
+        console.log("problem with changing the storage");
+    }
+
+}
 
 
 email.addEventListener("blur", onEmailBlur);
@@ -375,3 +394,4 @@ phone.addEventListener("input", onPhoneInput);
 namee.addEventListener("input", onNameInput);
 
 panel.addEventListener("input", checkCorrectFields);
+
