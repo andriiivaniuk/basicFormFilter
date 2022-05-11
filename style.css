@@ -1,0 +1,49 @@
+.panel{
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    
+}
+
+.input{
+    margin: 15px;
+    padding: 10px;
+    max-width: 300px;
+    display: block;
+}
+
+.input-name{
+    display: block;
+    width: 70px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.panel-item{
+    flex-direction: column;
+    display: block;
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    position: relative;
+    margin-top: 10px;
+}
+
+.errorSpan{
+    color:darkred;
+    margin-left: 20px;
+    display: block;
+    bottom: -3px;
+    left: 150px;
+}
+
+.done-but{
+    margin-top: 15px;
+    margin-left: 75px;
+    display: block;
+    width: 100px;
+    height: 40px;
+}
+
