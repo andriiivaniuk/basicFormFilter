@@ -213,7 +213,7 @@ const onEmailnput = (e) => {
         emailErrorsStack = emailErrorsStack.filter(x => x.id !== "emailLengthError");
     }
 
-    if(emailErrors.includes("emailFormatError") && email.value.includes("@") && email.value.includes(".")){        
+    if(/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/.test(email.value)){        
         if(document.getElementById("emailFormatError")){
             document.getElementById("emailFormatError").remove();
         }
@@ -222,7 +222,7 @@ const onEmailnput = (e) => {
         emailErrorsStack = emailErrorsStack.filter(x => x.id !== "emailFormatError");
     }   
 
-    if((!email.value.includes("@") || !email.value.includes(".")) && !emailErrors.includes("emailFormatError")){
+    if(!/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/.test(email.value) && !emailErrors.includes("emailFormatError")){
         createErrorMessage(email.parentElement, "wrong email format, @ or . are missing", "emailFormatError");
     }
 
@@ -277,39 +277,22 @@ const onNameInput = (e) => {
     }
 
     if(!nameErrors.includes("nameWrongSymbol")){
-        for(let i = 0; i < namee.value.length; i++){
-            
-            let str = namee.value[i];
-            
-            if((str.charCodeAt(0) < 65 || str.charCodeAt(0) > 90) && (str.charCodeAt(0) < 97 || str.charCodeAt(0) > 122) && str !== ' ' ){
-                if(!nameErrors.includes("nameWrongSymbol")){
-                    createErrorMessage(namee.parentElement, "wrong symbol in name", "nameWrongSymbol");
-                    break;
-                }
+        if(/[^а-яА-ЯA-Za-zїЇєҐіІ ]|^ | $|  /g.test(namee.value)){
+            if(!nameErrors.includes("nameWrongSymbol")){
+                createErrorMessage(namee.parentElement, "wrong symbol in name", "nameWrongSymbol");
             }
         }
     }
 
-    if(nameErrors.includes("nameWrongSymbol")){
-        let counter = 0;
+    if(!/[^а-яА-ЯA-Za-zїЇєҐіІ ]|^ | $|  /g.test(namee.value)){
 
-        for(let i = 0; i < namee.value.length; i++){
-
-            let str = namee.value[i];
-            if ((str.charCodeAt(0) < 65 || str.charCodeAt(0) > 90) && (str.charCodeAt(0) < 97 || str.charCodeAt(0) > 122) && str !== ' ' ){
-                counter++;
-                break;
-            }
+        if(document.getElementById("nameWrongSymbol")){
+            document.getElementById("nameWrongSymbol").remove();
         }
-
-        if(counter === 0){
-            if(document.getElementById("nameWrongSymbol")){
-                document.getElementById("nameWrongSymbol").remove();
-            }
-
-            nameErrors = nameErrors.filter(x => x !== "nameWrongSymbol");
-            nameErrorsStack = nameErrorsStack.filter(x => x.id !== "nameWrongSymbol");
-        }
+        
+        nameErrors = nameErrors.filter(x => x !== "nameWrongSymbol");
+        nameErrorsStack = nameErrorsStack.filter(x => x.id !== "nameWrongSymbol");
+        
     }
 
     if(namee.value.length === 0){
@@ -345,7 +328,7 @@ const checkCorrectFields = () => {
             button.disabled = false;
             possibleErrors.forEach(x => {
                 if(document.getElementById(x)){
-                    document.getElementById.remove();
+                    document.getElementById(x).remove();
                 } 
             }); 
             return;
@@ -367,19 +350,25 @@ const buttonClick = () => {
 const postInfo = async (newItem, url, method) => {
     newItem.id = newItem.name;
 
-    let responce = await fetch(url, { 
-        method: method,
-        headers: { 'Content-type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify(newItem),
-    })
+    try{
+        let responce = await fetch(url, { 
+            method: method,
+            headers: { 'Content-type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify(newItem),
+        })
 
-    if(responce.ok){
-        console.log("task done");
+        if(responce.ok){
+            alert("task done, info added");
+        }
+
+        else{
+            alert("problem with changing the storage");
+        }
     }
-
-    else{
-        console.log("problem with changing the storage");
+    
+    catch{
+        alert("unable to fetch, see console for error info");
     }
 
 }
